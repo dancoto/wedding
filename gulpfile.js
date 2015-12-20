@@ -15,12 +15,12 @@ gulp.task('clean', function () {
 gulp.task('concat-js', function() {
   return gulp.src(["node_modules/jquery/dist/jquery.min.js","node_modules/bootstrap/dist/js/bootstrap.min.js"])
     .pipe(concat('all.js'))
-    .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./dist/js/'));
 });
 gulp.task('concat-css', function() {
   return gulp.src(["./node_modules/bootstrap/dist/css/bootstrap.min.css", "./node_modules/bootstrap/dist/css/bootstrap-theme.min.css", "./src/css/theme.css"])
          .pipe(concat('all.css'))
-         .pipe(gulp.dest('./dist/'))
+         .pipe(gulp.dest('./dist/css/'))
 });
 
 gulp.task('copy-index', function() {
