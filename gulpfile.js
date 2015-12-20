@@ -43,4 +43,5 @@ gulp.task('deploy', function () {
     .pipe(deploy())
 });
 
-gulp.task('build', ['concat-js','concat-css', 'copy-images', 'copy-fonts', 'copy-index']);
+gulp.task('build', ['clean','concat-js','concat-css', 'copy-images', 'copy-fonts', 'copy-index']);
+gulp.task('release', ['build','deploy']);
