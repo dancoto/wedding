@@ -1,47 +1,41 @@
-var gulp        = require('gulp');
-var deploy      = require('gulp-gh-pages');
-var concat      = require('gulp-concat');
-var copy        = require('gulp-copy');
-var clean       = require('gulp-clean');
-
 /**
- * Push build to gh-pages
+ *  Welcome to your gulpfile!
+ *  The gulp tasks are splitted in several files in the gulp directory
+ *  because putting all here was really too long
  */
 
-gulp.task('clean', function () {
-	return gulp.src('./dist', {read: false})
-		.pipe(clean());
-});
-gulp.task('concat-js', function() {
-  return gulp.src(["node_modules/jquery/dist/jquery.min.js","node_modules/bootstrap/dist/js/bootstrap.min.js"])
-    .pipe(concat('all.js'))
-    .pipe(gulp.dest('./dist/js/'));
-});
-gulp.task('concat-css', function() {
-  return gulp.src(["./node_modules/bootstrap/dist/css/bootstrap.min.css", "./node_modules/bootstrap/dist/css/bootstrap-theme.min.css", "./src/css/theme.css"])
-         .pipe(concat('all.css'))
-         .pipe(gulp.dest('./dist/css/'))
+'use strict';
+
+var gulp = require('gulp');
+var deploy      = require('gulp-gh-pages');
+
+var wrench = require('wrench');
+
+/**
+ *  This will load all js or coffee files in the gulp directory
+ *  in order to load all gulp tasks
+ */
+wrench.readdirSyncRecursive('./gulp').filter(function(file) {
+  return (/\.(js|coffee)$/i).test(file);
+}).map(function(file) {
+  require('./gulp/' + file);
 });
 
-gulp.task('copy-index', function() {
-  return gulp.src("./src/index.html")
-         .pipe(gulp.dest('./dist/'))
+
+/**
+ *  Default task clean temporaries directories and launch the
+ *  main optimization build task
+ */
+gulp.task('default', ['clean'], function () {
+  gulp.start('build');
 });
 
-gulp.task('copy-images', function() {
-  return gulp.src("./src/images/**/*")
-        .pipe(gulp.dest("./dist/images/"))
-});
-
-gulp.task('copy-fonts', function() {
-    return gulp.src("./src/fonts/**/*")
-        .pipe(gulp.dest("./dist/fonts"))
-})
-
+/**
+ *  Deploy the website on Github Pages
+ */
 gulp.task('deploy', function () {
   return gulp.src("./dist/**/*")
     .pipe(deploy())
 });
 
-gulp.task('build', ['clean','concat-js','concat-css', 'copy-images', 'copy-fonts', 'copy-index']);
-gulp.task('release', ['build','deploy']);
+
